@@ -1,0 +1,90 @@
+object FrmMain: TFrmMain
+  Left = 636
+  Height = 824
+  Top = 152
+  Width = 1284
+  Caption = 'WebAgent'
+  ClientHeight = 824
+  ClientWidth = 1284
+  LCLVersion = '2.0.10.0'
+  object TxtUrlBar: TEdit
+    AnchorSideLeft.Control = CmbMethod
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Owner
+    Left = 172
+    Height = 35
+    Top = 6
+    Width = 624
+    BorderSpacing.Left = 6
+    BorderSpacing.Top = 6
+    OnExit = TxtUrlBarExit
+    TabOrder = 0
+    Text = 'https://'
+  end
+  object CmbMethod: TComboBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 6
+    Height = 35
+    Top = 6
+    Width = 160
+    AutoComplete = True
+    AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
+    BorderSpacing.Left = 6
+    BorderSpacing.Top = 6
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'GET'
+      'POST'
+      'PUT'
+      'PATCH'
+      'DELETE'
+    )
+    OnExit = CmbMethodExit
+    TabOrder = 1
+    Text = 'GET'
+  end
+  object PgMain: TPageControl
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = TxtUrlBar
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 6
+    Height = 771
+    Top = 47
+    Width = 1272
+    ActivePage = TabNew
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Left = 6
+    BorderSpacing.Top = 6
+    BorderSpacing.Right = 6
+    BorderSpacing.Bottom = 6
+    TabIndex = 0
+    TabOrder = 2
+    Options = [nboShowCloseButtons, nboShowAddTabButton]
+    object TabNew: TTabSheet
+      Caption = 'GET https://'
+    end
+  end
+  object BtnSend: TButton
+    AnchorSideLeft.Control = TxtUrlBar
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Owner
+    AnchorSideBottom.Control = TxtUrlBar
+    AnchorSideBottom.Side = asrBottom
+    Left = 802
+    Height = 35
+    Top = 6
+    Width = 75
+    Anchors = [akTop, akLeft, akBottom]
+    BorderSpacing.Left = 6
+    BorderSpacing.Top = 6
+    Caption = 'Send'
+    OnClick = BtnSendClick
+    TabOrder = 3
+  end
+end
