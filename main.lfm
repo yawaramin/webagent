@@ -1,11 +1,11 @@
 object FrmMain: TFrmMain
-  Left = 636
-  Height = 824
-  Top = 152
-  Width = 1284
+  Left = 424
+  Height = 949
+  Top = 88
+  Width = 1491
   Caption = 'WebAgent'
-  ClientHeight = 824
-  ClientWidth = 1284
+  ClientHeight = 949
+  ClientWidth = 1491
   LCLVersion = '2.0.10.0'
   object TxtUrlBar: TEdit
     AnchorSideLeft.Control = CmbMethod
@@ -18,7 +18,7 @@ object FrmMain: TFrmMain
     BorderSpacing.Left = 6
     BorderSpacing.Top = 6
     OnExit = TxtUrlBarExit
-    TabOrder = 0
+    TabOrder = 1
     Text = 'https://'
   end
   object CmbMethod: TComboBox
@@ -42,7 +42,7 @@ object FrmMain: TFrmMain
       'DELETE'
     )
     OnExit = CmbMethodExit
-    TabOrder = 1
+    TabOrder = 0
     Text = 'GET'
   end
   object PgMain: TPageControl
@@ -54,9 +54,10 @@ object FrmMain: TFrmMain
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 6
-    Height = 771
+    Height = 896
     Top = 47
-    Width = 1272
+    Width = 1479
+    TabStop = False
     ActivePage = TabNew
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 6
@@ -64,10 +65,208 @@ object FrmMain: TFrmMain
     BorderSpacing.Right = 6
     BorderSpacing.Bottom = 6
     TabIndex = 0
-    TabOrder = 2
+    TabOrder = 3
     Options = [nboShowCloseButtons, nboShowAddTabButton]
     object TabNew: TTabSheet
       Caption = 'GET https://'
+      ClientHeight = 854
+      ClientWidth = 1469
+      object SplReqResp: TPairSplitter
+        AnchorSideLeft.Control = TabNew
+        AnchorSideTop.Control = TabNew
+        AnchorSideRight.Control = TabNew
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = TabNew
+        AnchorSideBottom.Side = asrBottom
+        Cursor = crVSplit
+        Left = 6
+        Height = 842
+        Top = 6
+        Width = 1457
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        BorderSpacing.Left = 6
+        BorderSpacing.Top = 6
+        BorderSpacing.Right = 6
+        BorderSpacing.Bottom = 6
+        Position = 300
+        SplitterType = pstVertical
+        object SpsReq: TPairSplitterSide
+          Cursor = crArrow
+          Left = 0
+          Height = 300
+          Top = 0
+          Width = 1457
+          ClientWidth = 1457
+          ClientHeight = 300
+          object GrpRequest: TGroupBox
+            AnchorSideLeft.Control = SpsReq
+            AnchorSideTop.Control = SpsReq
+            AnchorSideRight.Control = SpsReq
+            AnchorSideRight.Side = asrBottom
+            AnchorSideBottom.Control = SpsReq
+            AnchorSideBottom.Side = asrBottom
+            Left = 0
+            Height = 300
+            Top = 0
+            Width = 1457
+            Anchors = [akTop, akLeft, akRight, akBottom]
+            Caption = 'Request'
+            ClientHeight = 280
+            ClientWidth = 1455
+            TabOrder = 0
+            object PgRequest: TPageControl
+              AnchorSideLeft.Control = GrpRequest
+              AnchorSideTop.Control = GrpRequest
+              AnchorSideRight.Control = GrpRequest
+              AnchorSideRight.Side = asrBottom
+              AnchorSideBottom.Control = GrpRequest
+              AnchorSideBottom.Side = asrBottom
+              Left = 6
+              Height = 268
+              Top = 6
+              Width = 1443
+              ActivePage = TabHeaders
+              Anchors = [akTop, akLeft, akRight, akBottom]
+              BorderSpacing.Left = 6
+              BorderSpacing.Top = 6
+              BorderSpacing.Right = 6
+              BorderSpacing.Bottom = 6
+              TabIndex = 2
+              TabOrder = 0
+              object TabParameters: TTabSheet
+                Caption = 'Parameters'
+              end
+              object TabAuthorization: TTabSheet
+                Caption = 'Authorization'
+              end
+              object TabHeaders: TTabSheet
+                Caption = 'Headers'
+                ClientHeight = 235
+                ClientWidth = 1433
+                object GrdRequestHeaders: TStringGrid
+                  AnchorSideLeft.Control = TabHeaders
+                  AnchorSideTop.Control = TabHeaders
+                  AnchorSideRight.Control = TabHeaders
+                  AnchorSideRight.Side = asrBottom
+                  AnchorSideBottom.Control = btnAddHeader
+                  Left = 0
+                  Height = 196
+                  Top = 6
+                  Width = 1433
+                  Anchors = [akTop, akLeft, akRight, akBottom]
+                  AutoFillColumns = True
+                  BorderSpacing.Top = 6
+                  ColCount = 4
+                  ColumnClickSorts = True
+                  Columns = <                  
+                    item
+                      Alignment = taRightJustify
+                      ReadOnly = True
+                      SizePriority = 0
+                      Title.Caption = ''
+                      Width = 40
+                    end                  
+                    item
+                      Title.Caption = 'Name'
+                      Width = 463
+                    end                  
+                    item
+                      Title.Caption = 'Value'
+                      Width = 463
+                    end                  
+                    item
+                      Title.Caption = 'Description'
+                      Width = 465
+                    end>
+                  FixedCols = 0
+                  Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goSmoothScroll]
+                  RowCount = 2
+                  TabOrder = 0
+                  ColWidths = (
+                    40
+                    463
+                    463
+                    465
+                  )
+                  Cells = (
+                    1
+                    1
+                    1
+                    'User-Agent'
+                  )
+                end
+                object btnAddHeader: TButton
+                  AnchorSideLeft.Control = TabHeaders
+                  AnchorSideBottom.Control = TabHeaders
+                  AnchorSideBottom.Side = asrBottom
+                  Left = 0
+                  Height = 33
+                  Hint = 'Add header'
+                  Top = 202
+                  Width = 33
+                  Anchors = [akLeft, akBottom]
+                  Caption = '➕'
+                  Font.Height = -24
+                  Font.Name = 'Sans'
+                  OnClick = btnAddHeaderClick
+                  ParentFont = False
+                  TabOrder = 1
+                end
+              end
+              object TabBody: TTabSheet
+                Caption = 'Body'
+                ClientHeight = 235
+                ClientWidth = 1433
+                object MmoBody: TMemo
+                  AnchorSideLeft.Control = TabBody
+                  AnchorSideTop.Control = TabBody
+                  AnchorSideRight.Control = TabBody
+                  AnchorSideRight.Side = asrBottom
+                  AnchorSideBottom.Control = TabBody
+                  AnchorSideBottom.Side = asrBottom
+                  Left = 6
+                  Height = 223
+                  Top = 6
+                  Width = 1421
+                  Anchors = [akTop, akLeft, akRight, akBottom]
+                  BorderSpacing.Left = 6
+                  BorderSpacing.Top = 6
+                  BorderSpacing.Right = 6
+                  BorderSpacing.Bottom = 6
+                  Font.Height = -16
+                  Font.Name = 'Monospace'
+                  ParentFont = False
+                  TabOrder = 0
+                end
+              end
+            end
+          end
+        end
+        object SpsResp: TPairSplitterSide
+          Cursor = crArrow
+          Left = 0
+          Height = 537
+          Top = 305
+          Width = 1457
+          ClientWidth = 1457
+          ClientHeight = 537
+          object GrpResponse: TGroupBox
+            AnchorSideLeft.Control = SpsResp
+            AnchorSideTop.Control = SpsResp
+            AnchorSideRight.Control = SpsResp
+            AnchorSideRight.Side = asrBottom
+            AnchorSideBottom.Control = SpsResp
+            AnchorSideBottom.Side = asrBottom
+            Left = 0
+            Height = 537
+            Top = 0
+            Width = 1457
+            Anchors = [akTop, akLeft, akRight, akBottom]
+            Caption = 'Response'
+            TabOrder = 0
+          end
+        end
+      end
     end
   end
   object BtnSend: TButton
@@ -85,6 +284,57 @@ object FrmMain: TFrmMain
     BorderSpacing.Top = 6
     Caption = 'Send'
     OnClick = BtnSendClick
-    TabOrder = 3
+    TabOrder = 2
+  end
+  object btnDelHeader: TButton
+    AnchorSideLeft.Control = TabHeaders
+    AnchorSideBottom.Control = TabHeaders
+    AnchorSideBottom.Side = asrBottom
+    Left = 64
+    Height = 33
+    Hint = 'Remove header'
+    Top = 352
+    Width = 33
+    Anchors = [akLeft, akBottom]
+    Caption = '➖'
+    Font.Height = -24
+    Font.Name = 'Sans'
+    OnClick = btnDelHeaderClick
+    ParentFont = False
+    TabOrder = 4
+  end
+  object btnEnableHeader: TButton
+    AnchorSideLeft.Control = TabHeaders
+    AnchorSideBottom.Control = TabHeaders
+    AnchorSideBottom.Side = asrBottom
+    Left = 104
+    Height = 33
+    Hint = 'Enable header'
+    Top = 352
+    Width = 33
+    Anchors = [akLeft, akBottom]
+    Caption = '✅'
+    Font.Height = -24
+    Font.Name = 'Sans'
+    OnClick = btnAddHeaderClick
+    ParentFont = False
+    TabOrder = 5
+  end
+  object btnDisableHeader: TButton
+    AnchorSideLeft.Control = TabHeaders
+    AnchorSideBottom.Control = TabHeaders
+    AnchorSideBottom.Side = asrBottom
+    Left = 136
+    Height = 33
+    Hint = 'Disable header'
+    Top = 352
+    Width = 33
+    Anchors = [akLeft, akBottom]
+    Caption = '❌'
+    Font.Height = -24
+    Font.Name = 'Sans'
+    OnClick = btnAddHeaderClick
+    ParentFont = False
+    TabOrder = 6
   end
 end
