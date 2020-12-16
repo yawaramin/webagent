@@ -8,6 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
   ComCtrls, PairSplitter, Grids, Buttons,
   FpHttpClient,
+  LCLType,
   OpenSslSockets,
   OpenSsl,
   strutils;
@@ -17,11 +18,11 @@ type
   { TFrmMain }
 
   TFrmMain = class(TForm)
-    btnDelHeader: TButton;
-    btnEnableHeader: TButton;
-    btnDisableHeader: TButton;
+    BtnDelHeader: TButton;
+    BtnEnableHeader: TButton;
+    BtnDisableHeader: TButton;
     BtnSend: TButton;
-    btnAddHeader: TButton;
+    BtnAddHeader: TButton;
     CmbMethod: TComboBox;
     GrpResponse: TGroupBox;
     GrpRequest: TGroupBox;
@@ -38,11 +39,14 @@ type
     TabBody: TTabSheet;
     TabParameters: TTabSheet;
     TxtUrlBar: TEdit;
-    procedure btnAddHeaderClick(Sender: TObject);
-    procedure btnDelHeaderClick(Sender: TObject);
+    procedure BtnAddHeaderClick(Sender: TObject);
+    procedure BtnDelHeaderClick(Sender: TObject);
+    procedure BtnDisableHeaderClick(Sender: TObject);
+    procedure BtnEnableHeaderClick(Sender: TObject);
     procedure BtnSendClick(Sender: TObject);
     procedure CmbMethodExit(Sender: TObject);
     procedure TxtUrlBarExit(Sender: TObject);
+    procedure TxtUrlBarKeyPress(Sender: TObject; var Key: char);
   private
     procedure InitClient();
     procedure SetTabText();
@@ -72,12 +76,16 @@ begin
   WriteLn(Client.Get(TxtUrlBar.Text));
 end;
 
-procedure TFrmMain.btnAddHeaderClick(Sender: TObject);
+procedure TFrmMain.BtnAddHeaderClick(Sender: TObject);
+var
+  Idx: Integer;
 begin
-  GrdRequestHeaders.InsertColRow(false, GrdRequestHeaders.RowCount);
+  Idx := GrdRequestHeaders.RowCount;
+  GrdRequestHeaders.InsertColRow(false, Idx);
+  GrdRequestHeaders.Cells[0, Idx] := '✅';
 end;
 
-procedure TFrmMain.btnDelHeaderClick(Sender: TObject);
+procedure TFrmMain.BtnDelHeaderClick(Sender: TObject);
 begin
   try
      GrdRequestHeaders.DeleteRow(GrdRequestHeaders.Row);
@@ -86,9 +94,24 @@ begin
   end;
 end;
 
+procedure TFrmMain.BtnDisableHeaderClick(Sender: TObject);
+begin
+  GrdRequestHeaders.Cells[0, GrdRequestHeaders.Row] := '';
+end;
+
+procedure TFrmMain.BtnEnableHeaderClick(Sender: TObject);
+begin
+  GrdRequestHeaders.Cells[0, GrdRequestHeaders.Row] := '✅';
+end;
+
 procedure TFrmMain.TxtUrlBarExit(Sender: TObject);
 begin
   SetTabText();
+end;
+
+procedure TFrmMain.TxtUrlBarKeyPress(Sender: TObject; var Key: char);
+begin
+  if Ord(Key) = VK_RETURN then BtnSendClick(Sender);
 end;
 
 procedure TFrmMain.InitClient();
