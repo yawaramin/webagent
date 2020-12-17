@@ -23,6 +23,7 @@ type
     BtnDisableHeader: TButton;
     BtnSend: TButton;
     BtnAddHeader: TButton;
+    BtnCancel: TButton;
     CmbMethod: TComboBox;
     GrpResponse: TGroupBox;
     GrpRequest: TGroupBox;
@@ -45,6 +46,7 @@ type
     procedure BtnEnableHeaderClick(Sender: TObject);
     procedure BtnSendClick(Sender: TObject);
     procedure CmbMethodExit(Sender: TObject);
+    procedure GrdRequestHeadersExit(Sender: TObject);
     procedure TxtUrlBarExit(Sender: TObject);
     procedure TxtUrlBarKeyPress(Sender: TObject; var Key: char);
   private
@@ -69,11 +71,21 @@ begin
   SetTabText();
 end;
 
+procedure TFrmMain.GrdRequestHeadersExit(Sender: TObject);
+begin
+  TabHeaders.Caption := 'Headers · ' + GrdRequestHeaders.RowCount.ToString;
+end;
+
 procedure TFrmMain.BtnSendClick(Sender: TObject);
 begin
   SetTabText();
   InitClient();
-  WriteLn(Client.Get(TxtUrlBar.Text));
+
+  try
+    WriteLn(Client.Get(TxtUrlBar.Text));
+  except
+    WriteLn('[ERROR] request failed');
+  end;
 end;
 
 procedure TFrmMain.BtnAddHeaderClick(Sender: TObject);
@@ -82,7 +94,7 @@ var
 begin
   Idx := GrdRequestHeaders.RowCount;
   GrdRequestHeaders.InsertColRow(false, Idx);
-  GrdRequestHeaders.Cells[0, Idx] := '✅';
+  GrdRequestHeaders.Cells[0, Idx] := '☑';
 end;
 
 procedure TFrmMain.BtnDelHeaderClick(Sender: TObject);
@@ -101,7 +113,7 @@ end;
 
 procedure TFrmMain.BtnEnableHeaderClick(Sender: TObject);
 begin
-  GrdRequestHeaders.Cells[0, GrdRequestHeaders.Row] := '✅';
+  GrdRequestHeaders.Cells[0, GrdRequestHeaders.Row] := '☑';
 end;
 
 procedure TFrmMain.TxtUrlBarExit(Sender: TObject);
@@ -115,11 +127,26 @@ begin
 end;
 
 procedure TFrmMain.InitClient();
+var
+  Idx: LongInt;
+  HName: String;
+  HValue: String;
 begin
   if Client = nil then begin
     Client := TFpHttpClient.Create(Self);
     Client.AllowRedirect := true;
   end;
+
+  Client.RequestHeaders.Clear();
+  for Idx := 0 to GrdRequestHeaders.RowCount - 1 do begin
+    HName := GrdRequestHeaders.Cells[1, Idx];
+    HValue := GrdRequestHeaders.Cells[2, Idx];
+
+    if (HName <> '') and (HValue <> '') then
+       Client.RequestHeaders.AddPair(HName, HValue);
+  end;
+
+  WriteLn(Client.RequestHeaders.CommaText);
 end;
 
 procedure TFrmMain.SetTabText();
