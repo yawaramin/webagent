@@ -27,7 +27,9 @@ type
     CmbMethod: TComboBox;
     GrpResponse: TGroupBox;
     GrpRequest: TGroupBox;
-    MmoBody: TMemo;
+    MmoResponseBody: TMemo;
+    MmoRequestBody: TMemo;
+    PgResponse: TPageControl;
     PgRequest: TPageControl;
     SplReqResp: TPairSplitter;
     SpsReq: TPairSplitterSide;
@@ -36,9 +38,11 @@ type
     GrdRequestHeaders: TStringGrid;
     TabNew: TTabSheet;
     TabAuthorization: TTabSheet;
-    TabHeaders: TTabSheet;
-    TabBody: TTabSheet;
+    TabRequestHeaders: TTabSheet;
+    TabRequestBody: TTabSheet;
     TabParameters: TTabSheet;
+    TabResponseBody: TTabSheet;
+    TabResponseHeaders: TTabSheet;
     TxtUrlBar: TEdit;
     procedure BtnAddHeaderClick(Sender: TObject);
     procedure BtnDelHeaderClick(Sender: TObject);
@@ -71,9 +75,25 @@ begin
   SetTabText();
 end;
 
+function ValidKV(K, V: String): Boolean;
+begin
+  Result := (K <> '') and (V <> '');
+end;
+
+function CountValidKV(Grd: TStringGrid): Integer;
+var
+  Idx: Integer;
+begin
+  Result := 0;
+
+  for Idx := 0 to Grd.RowCount - 1 do
+    if ValidKV(Grd.Cells[1, Idx], Grd.Cells[2, Idx]) then
+      Result := Result + 1;
+end;
+
 procedure TFrmMain.GrdRequestHeadersExit(Sender: TObject);
 begin
-  TabHeaders.Caption := 'Headers · ' + GrdRequestHeaders.RowCount.ToString;
+  TabRequestHeaders.Caption := 'Headers · ' + CountValidKV(GrdRequestHeaders).ToString;
 end;
 
 procedure TFrmMain.BtnSendClick(Sender: TObject);
@@ -82,7 +102,7 @@ begin
   InitClient();
 
   try
-    WriteLn(Client.Get(TxtUrlBar.Text));
+    MmoResponseBody.Lines.Text := Client.Get(TxtUrlBar.Text);
   except
     WriteLn('[ERROR] request failed');
   end;
@@ -142,11 +162,8 @@ begin
     HName := GrdRequestHeaders.Cells[1, Idx];
     HValue := GrdRequestHeaders.Cells[2, Idx];
 
-    if (HName <> '') and (HValue <> '') then
-       Client.RequestHeaders.AddPair(HName, HValue);
+    if ValidKV(HName, HValue) then Client.RequestHeaders.AddPair(HName, HValue);
   end;
-
-  WriteLn(Client.RequestHeaders.CommaText);
 end;
 
 procedure TFrmMain.SetTabText();

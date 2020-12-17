@@ -1,7 +1,7 @@
 object FrmMain: TFrmMain
-  Left = 415
+  Left = 420
   Height = 949
-  Top = 88
+  Top = 41
   Width = 1491
   Caption = 'WebAgent'
   ClientHeight = 949
@@ -87,7 +87,7 @@ object FrmMain: TFrmMain
               Height = 227
               Top = 47
               Width = 1443
-              ActivePage = TabHeaders
+              ActivePage = TabRequestHeaders
               Anchors = [akTop, akLeft, akRight, akBottom]
               BorderSpacing.Left = 6
               BorderSpacing.Top = 6
@@ -101,14 +101,14 @@ object FrmMain: TFrmMain
               object TabAuthorization: TTabSheet
                 Caption = 'Authorization'
               end
-              object TabHeaders: TTabSheet
+              object TabRequestHeaders: TTabSheet
                 Caption = 'Headers · 1'
                 ClientHeight = 194
                 ClientWidth = 1433
                 object GrdRequestHeaders: TStringGrid
-                  AnchorSideLeft.Control = TabHeaders
-                  AnchorSideTop.Control = TabHeaders
-                  AnchorSideRight.Control = TabHeaders
+                  AnchorSideLeft.Control = TabRequestHeaders
+                  AnchorSideTop.Control = TabRequestHeaders
+                  AnchorSideRight.Control = TabRequestHeaders
                   AnchorSideRight.Side = asrBottom
                   AnchorSideBottom.Control = BtnAddHeader
                   Left = 0
@@ -166,8 +166,8 @@ object FrmMain: TFrmMain
                   )
                 end
                 object BtnAddHeader: TButton
-                  AnchorSideLeft.Control = TabHeaders
-                  AnchorSideBottom.Control = TabHeaders
+                  AnchorSideLeft.Control = TabRequestHeaders
+                  AnchorSideBottom.Control = TabRequestHeaders
                   AnchorSideBottom.Side = asrBottom
                   Left = 0
                   Height = 33
@@ -187,7 +187,7 @@ object FrmMain: TFrmMain
                 object BtnDelHeader: TButton
                   AnchorSideLeft.Control = BtnAddHeader
                   AnchorSideLeft.Side = asrBottom
-                  AnchorSideBottom.Control = TabHeaders
+                  AnchorSideBottom.Control = TabRequestHeaders
                   AnchorSideBottom.Side = asrBottom
                   Left = 33
                   Height = 33
@@ -207,7 +207,7 @@ object FrmMain: TFrmMain
                 object BtnEnableHeader: TButton
                   AnchorSideLeft.Control = BtnDelHeader
                   AnchorSideLeft.Side = asrBottom
-                  AnchorSideBottom.Control = TabHeaders
+                  AnchorSideBottom.Control = TabRequestHeaders
                   AnchorSideBottom.Side = asrBottom
                   Left = 66
                   Height = 33
@@ -227,7 +227,7 @@ object FrmMain: TFrmMain
                 object BtnDisableHeader: TButton
                   AnchorSideLeft.Control = BtnEnableHeader
                   AnchorSideLeft.Side = asrBottom
-                  AnchorSideBottom.Control = TabHeaders
+                  AnchorSideBottom.Control = TabRequestHeaders
                   AnchorSideBottom.Side = asrBottom
                   Left = 99
                   Height = 33
@@ -245,19 +245,19 @@ object FrmMain: TFrmMain
                   TabOrder = 4
                 end
               end
-              object TabBody: TTabSheet
+              object TabRequestBody: TTabSheet
                 Caption = 'Body'
                 ClientHeight = 194
                 ClientWidth = 1433
-                object MmoBody: TMemo
-                  AnchorSideLeft.Control = TabBody
-                  AnchorSideTop.Control = TabBody
-                  AnchorSideRight.Control = TabBody
+                object MmoRequestBody: TMemo
+                  AnchorSideLeft.Control = TabRequestBody
+                  AnchorSideTop.Control = TabRequestBody
+                  AnchorSideRight.Control = TabRequestBody
                   AnchorSideRight.Side = asrBottom
-                  AnchorSideBottom.Control = TabBody
+                  AnchorSideBottom.Control = TabRequestBody
                   AnchorSideBottom.Side = asrBottom
                   Left = 6
-                  Height = 223
+                  Height = 182
                   Top = 6
                   Width = 1421
                   Anchors = [akTop, akLeft, akRight, akBottom]
@@ -377,7 +377,55 @@ object FrmMain: TFrmMain
             Width = 1457
             Anchors = [akTop, akLeft, akRight, akBottom]
             Caption = 'Response'
+            ClientHeight = 558
+            ClientWidth = 1455
             TabOrder = 0
+            object PgResponse: TPageControl
+              AnchorSideLeft.Control = GrpResponse
+              AnchorSideTop.Control = GrpResponse
+              AnchorSideRight.Control = GrpResponse
+              AnchorSideRight.Side = asrBottom
+              AnchorSideBottom.Control = GrpResponse
+              AnchorSideBottom.Side = asrBottom
+              Left = 6
+              Height = 546
+              Top = 6
+              Width = 1443
+              ActivePage = TabResponseBody
+              Anchors = [akTop, akLeft, akRight, akBottom]
+              BorderSpacing.Left = 6
+              BorderSpacing.Top = 6
+              BorderSpacing.Right = 6
+              BorderSpacing.Bottom = 6
+              TabIndex = 0
+              TabOrder = 0
+              object TabResponseBody: TTabSheet
+                Caption = 'Body'
+                ClientHeight = 513
+                ClientWidth = 1433
+                object MmoResponseBody: TMemo
+                  AnchorSideLeft.Control = TabResponseBody
+                  AnchorSideTop.Control = TabResponseBody
+                  AnchorSideRight.Control = TabResponseBody
+                  AnchorSideRight.Side = asrBottom
+                  AnchorSideBottom.Control = TabResponseBody
+                  AnchorSideBottom.Side = asrBottom
+                  Left = 6
+                  Height = 501
+                  Top = 6
+                  Width = 1421
+                  Anchors = [akTop, akLeft, akRight, akBottom]
+                  BorderSpacing.Left = 6
+                  BorderSpacing.Top = 6
+                  BorderSpacing.Right = 6
+                  BorderSpacing.Bottom = 6
+                  TabOrder = 0
+                end
+              end
+              object TabResponseHeaders: TTabSheet
+                Caption = 'Headers'
+              end
+            end
           end
         end
       end
