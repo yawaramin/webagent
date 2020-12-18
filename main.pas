@@ -59,6 +59,7 @@ type
   private
     procedure InitClient;
     procedure SetTabText;
+    procedure SetResHeaders(Headers: TStrings);
   public
 
   end;
@@ -132,6 +133,8 @@ begin
           ReqEnd - ReqStart,
           ResBody.Length
         ]);
+
+      SetResHeaders(Client.ResponseHeaders);
     except
       on E: Exception do SttResponseInfo.Caption := E.Message;
     end;
@@ -139,6 +142,31 @@ begin
     MmoResponseBody.Lines.Text := ResBody;
     Client.RequestBody.Free;
   end;
+end;
+
+procedure TFrmMain.SetResHeaders(Headers: TStrings);
+var
+  StringsIdx, HeadersIdx: Integer;
+  HName, HValue: String;
+begin
+  for HeadersIdx := 1 to GrdResponseHeaders.RowCount - 1 do
+    GrdResponseHeaders.DeleteRow(HeadersIdx);
+
+  HeadersIdx := 1;
+
+  for StringsIdx := 0 to Headers.Count - 1 do begin
+    Headers.GetNameValue(StringsIdx, HName, HValue);
+
+    if ValidKV(HName, HValue) then begin
+      GrdResponseHeaders.InsertRowWithValues(HeadersIdx, [HName, HValue]);
+      HeadersIdx := HeadersIdx + 1;
+    end;
+  end;
+
+  TabResponseHeaders.Caption := Format(
+    'Headers · %d',
+    { Subtract one for the title row }
+    [GrdResponseHeaders.RowCount - 1]);
 end;
 
 procedure TFrmMain.BtnAddHeaderClick(Sender: TObject);
@@ -179,7 +207,7 @@ begin
   if Ord(Key) = VK_RETURN then BtnSendClick(Sender);
 end;
 
-procedure TFrmMain.InitClient();
+procedure TFrmMain.InitClient;
 var
   Idx: LongInt;
   HName: String;
