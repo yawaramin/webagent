@@ -268,6 +268,7 @@ object FrmMain: TFrmMain
                   Font.Height = -16
                   Font.Name = 'Monospace'
                   ParentFont = False
+                  ScrollBars = ssAutoBoth
                   TabOrder = 0
                 end
               end
@@ -419,12 +420,68 @@ object FrmMain: TFrmMain
                   BorderSpacing.Top = 6
                   BorderSpacing.Right = 6
                   BorderSpacing.Bottom = 6
+                  Font.Height = -16
+                  Font.Name = 'Monospace'
+                  ParentFont = False
+                  ReadOnly = True
+                  ScrollBars = ssAutoBoth
                   TabOrder = 0
                 end
               end
               object TabResponseHeaders: TTabSheet
                 Caption = 'Headers'
+                ClientHeight = 513
+                ClientWidth = 1433
+                object GrdResponseHeaders: TStringGrid
+                  AnchorSideLeft.Control = TabResponseHeaders
+                  AnchorSideTop.Control = TabResponseHeaders
+                  AnchorSideRight.Control = TabResponseHeaders
+                  AnchorSideRight.Side = asrBottom
+                  AnchorSideBottom.Control = TabResponseHeaders
+                  AnchorSideBottom.Side = asrBottom
+                  Left = 6
+                  Height = 501
+                  Top = 6
+                  Width = 1421
+                  Anchors = [akTop, akLeft, akRight, akBottom]
+                  AutoEdit = False
+                  AutoFillColumns = True
+                  BorderSpacing.Left = 6
+                  BorderSpacing.Top = 6
+                  BorderSpacing.Right = 6
+                  BorderSpacing.Bottom = 6
+                  ColCount = 2
+                  ColumnClickSorts = True
+                  Columns = <                  
+                    item
+                      SizePriority = 0
+                      Title.Caption = 'Name'
+                      Width = 500
+                    end                  
+                    item
+                      Title.Caption = 'Value'
+                      Width = 919
+                    end>
+                  FixedCols = 0
+                  RowCount = 1
+                  TabOrder = 0
+                  ColWidths = (
+                    500
+                    919
+                  )
+                end
               end
+            end
+            object SttResponseInfo: TStaticText
+              Left = 864
+              Height = 24
+              Top = 0
+              Width = 579
+              Alignment = taRightJustify
+              Anchors = [akTop, akRight]
+              BorderSpacing.Right = 12
+              Caption = 'Status: (none) · Time: (none) · Size: (none)'
+              TabOrder = 1
             end
           end
         end

@@ -8,6 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
   ComCtrls, PairSplitter, Grids, Buttons,
   FpHttpClient,
+  LCLIntf,
   LCLType,
   OpenSslSockets,
   OpenSsl,
@@ -36,6 +37,8 @@ type
     SpsResp: TPairSplitterSide;
     PgMain: TPageControl;
     GrdRequestHeaders: TStringGrid;
+    GrdResponseHeaders: TStringGrid;
+    SttResponseInfo: TStaticText;
     TabNew: TTabSheet;
     TabAuthorization: TTabSheet;
     TabRequestHeaders: TTabSheet;
@@ -54,11 +57,16 @@ type
     procedure TxtUrlBarExit(Sender: TObject);
     procedure TxtUrlBarKeyPress(Sender: TObject; var Key: char);
   private
-    procedure InitClient();
-    procedure SetTabText();
+    procedure InitClient;
+    procedure SetTabText;
   public
 
   end;
+
+const
+  StatusColumnIdx = 0;
+  NameColumnIdx = 1;
+  ValueColumnIdx = 2;
 
 var
   FrmMain: TFrmMain;
@@ -72,7 +80,7 @@ implementation
 
 procedure TFrmMain.CmbMethodExit(Sender: TObject);
 begin
-  SetTabText();
+  SetTabText;
 end;
 
 function ValidKV(K, V: String): Boolean;
@@ -87,7 +95,7 @@ begin
   Result := 0;
 
   for Idx := 0 to Grd.RowCount - 1 do
-    if ValidKV(Grd.Cells[1, Idx], Grd.Cells[2, Idx]) then
+    if ValidKV(Grd.Cells[NameColumnIdx, Idx], Grd.Cells[ValueColumnIdx, Idx]) then
       Result := Result + 1;
 end;
 
@@ -97,14 +105,39 @@ begin
 end;
 
 procedure TFrmMain.BtnSendClick(Sender: TObject);
+const
+  ResInfoFmt: String = 'Status: %d %s · Time: %dms · Size: %dB';
+var
+  ReqStart: DWord;
+  ReqEnd: DWord;
+  ResBody: String;
 begin
-  SetTabText();
-  InitClient();
+  ResBody := '';
+  SetTabText;
+  InitClient;
 
   try
-    MmoResponseBody.Lines.Text := Client.Get(TxtUrlBar.Text);
-  except
-    WriteLn('[ERROR] request failed');
+    Client.RequestBody := TRawByteStringStream.Create(MmoRequestBody.Lines.Text);
+    ReqStart := GetTickCount;
+
+    try
+      ResBody := Client.Get(TxtUrlBar.Text);
+      ReqEnd := GetTickCount;
+
+      SttResponseInfo.Caption := Format(
+        ResInfoFmt,
+        [
+          Client.ResponseStatusCode,
+          Client.ResponseStatusText,
+          ReqEnd - ReqStart,
+          ResBody.Length
+        ]);
+    except
+      on E: Exception do SttResponseInfo.Caption := E.Message;
+    end;
+  finally
+    MmoResponseBody.Lines.Text := ResBody;
+    Client.RequestBody.Free;
   end;
 end;
 
@@ -114,7 +147,7 @@ var
 begin
   Idx := GrdRequestHeaders.RowCount;
   GrdRequestHeaders.InsertColRow(false, Idx);
-  GrdRequestHeaders.Cells[0, Idx] := '☑';
+  GrdRequestHeaders.Cells[StatusColumnIdx, Idx] := '☑';
 end;
 
 procedure TFrmMain.BtnDelHeaderClick(Sender: TObject);
@@ -128,17 +161,17 @@ end;
 
 procedure TFrmMain.BtnDisableHeaderClick(Sender: TObject);
 begin
-  GrdRequestHeaders.Cells[0, GrdRequestHeaders.Row] := '';
+  GrdRequestHeaders.Cells[StatusColumnIdx, GrdRequestHeaders.Row] := '';
 end;
 
 procedure TFrmMain.BtnEnableHeaderClick(Sender: TObject);
 begin
-  GrdRequestHeaders.Cells[0, GrdRequestHeaders.Row] := '☑';
+  GrdRequestHeaders.Cells[StatusColumnIdx, GrdRequestHeaders.Row] := '☑';
 end;
 
 procedure TFrmMain.TxtUrlBarExit(Sender: TObject);
 begin
-  SetTabText();
+  SetTabText;
 end;
 
 procedure TFrmMain.TxtUrlBarKeyPress(Sender: TObject; var Key: char);
@@ -157,16 +190,16 @@ begin
     Client.AllowRedirect := true;
   end;
 
-  Client.RequestHeaders.Clear();
+  Client.RequestHeaders.Clear;
   for Idx := 0 to GrdRequestHeaders.RowCount - 1 do begin
-    HName := GrdRequestHeaders.Cells[1, Idx];
-    HValue := GrdRequestHeaders.Cells[2, Idx];
+    HName := GrdRequestHeaders.Cells[NameColumnIdx, Idx];
+    HValue := GrdRequestHeaders.Cells[ValueColumnIdx, Idx];
 
     if ValidKV(HName, HValue) then Client.RequestHeaders.AddPair(HName, HValue);
   end;
 end;
 
-procedure TFrmMain.SetTabText();
+procedure TFrmMain.SetTabText;
 begin
   PgMain.ActivePage.Caption := CmbMethod.Text + ' ' + RightStr(TxtUrlBar.Text, 20);
 end;
